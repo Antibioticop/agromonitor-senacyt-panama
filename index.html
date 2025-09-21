@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroMonitor - SENACYT Panamá 🇵🇦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 120px;
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .sensor-item {
+            text-align: center;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .sensor-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .sensor-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .sensor-unit {
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+
+        .recommendations {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 10px 0;
+            gap: 10px;
+        }
+
+        .recommendation-icon {
+            background: #27ae60;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            border-left-color: #e74c3c;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .history-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .footer {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌱 AgroMonitor SENACYT</h1>
+            <p>Sistema Inteligente de Monitoreo Agrícola - Panamá 🇵🇦</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value" id="connectionStatus">🔴 Desconectado</div>
+                <div class="status-label">Estado del Sistema</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="lastUpdate">--:--</div>
+                <div class="status-label">Última Actualización</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="totalReadings">0</div>
+                <div class="status-label">Lecturas Totales</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="soilStatus">Analizando...</div>
+                <div class="status-label">Estado del Suelo</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="cards-grid">
+            <!-- Datos de Sensores -->
+            <div class="card">
+                <div class="card-title">
+                    📊 Datos de Sensores en Tiempo Real
+                </div>
+                <div class="sensor-grid">
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="nitrogen">--</div>
+                        <div class="sensor-label">Nitrógeno</div>
+                        <div class="sensor-unit">mg/kg</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="phosphorus">--</div>
+                        <div class="sensor-label">Fósforo</div>
+                        <div class="sensor-unit">mg/kg</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="potassium">--</div>
+                        <div class="sensor-label">Potasio</div>
+                        <div class="sensor-unit">mg/kg</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="soilMoisture">--</div>
+                        <div class="sensor-label">Humedad</div>
+                        <div class="sensor-unit">%</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="temperature">--</div>
+                        <div class="sensor-label">Temperatura</div>
+                        <div class="sensor-unit">°C</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="humidity">--</div>
+                        <div class="sensor-label">Humedad Amb.</div>
+                        <div class="sensor-unit">%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recomendaciones de IA -->
+            <div class="card">
+                <div class="card-title">
+                    🤖 Recomendaciones Inteligentes
+                </div>
+                <div id="recommendations">
+                    <div class="alert">
+                        <strong>🔄 Esperando datos...</strong><br>
+                        Las recomendaciones aparecerán cuando se reciban datos de los sensores.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles -->
+            <div class="card">
+                <div class="card-title">
+                    ⚙️ Controles del Sistema
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="updateData()">
+                        <span id="updateIcon">🔄</span> Actualizar Datos
+                    </button>
+                    <button class="btn btn-success" onclick="exportData()">
+                        📥 Exportar CSV
+                    </button>
+                    <button class="btn btn-warning" onclick="toggleAutoUpdate()">
+                        <span id="autoUpdateIcon">⏸️</span> <span id="autoUpdateText">Auto-actualización</span>
+                    </button>
+                </div>
+                <div class="alert">
+                    <strong>💡 Tip:</strong> Los datos se actualizan automáticamente cada 30 segundos.
+                </div>
+            </div>
+
+            <!-- Historial -->
+            <div class="card">
+                <div class="card-title">
+                    📈 Historial de Lecturas
+                </div>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Hora</th>
+                                <th>N</th>
+                                <th>P</th>
+                                <th>K</th>
+                                <th>Humedad</th>
+                                <th>Temp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #7f8c8d;">
+                                    No hay datos disponibles
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🇵🇦 Desarrollado para SENACYT Panamá | Sistema de Monitoreo Agrícola Inteligente</p>
+            <p>🌱 Optimizando la agricultura con tecnología IoT e Inteligencia Artificial</p>
+        </div>
+    </div>
+
+    <script>
+        // ====================================================================
+        // CONFIGURACIÓN - CAMBIAR ESTAS URLS
+        // ====================================================================
+        const N8N_WEBHOOK_URL = 'https://lgespino.app.n8n.cloud/webhook-test/GET_ENDPOINT_AQUI'; // 🔧 CAMBIAR POR TU ENDPOINT GET
+        
+        // ====================================================================
+        // VARIABLES GLOBALES
+        // ====================================================================
+        let autoUpdateEnabled = true;
+        let autoUpdateInterval;
+        let sensorData = [];
+        let totalReadings = 0;
+
+        // ====================================================================
+        // INICIALIZACIÓN
+        // ====================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌱 AgroMonitor SENACYT iniciado');
+            updateData();
+            startAutoUpdate();
+        });
+
+        // ====================================================================
+        // FUNCIÓN PRINCIPAL PARA OBTENER DATOS
+        // ====================================================================
+        async function updateData() {
+            const updateIcon = document.getElementById('updateIcon');
+            updateIcon.innerHTML = '<div class="loading"></div>';
+            
+            try {
+                console.log('📡 Obteniendo datos de n8n...');
+                
+                // Intentar obtener datos de n8n
+                const response = await fetch(N8N_WEBHOOK_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('📥 Datos recibidos:', data);
+                
+                // Procesar datos
+                processData(data);
+                updateConnectionStatus(true);
+                
+            } catch (error) {
+                console.error('❌ Error obteniendo datos:', error);
+                updateConnectionStatus(false);
+                
+                // Usar datos simulados para demo
+                const simulatedData = generateSimulatedData();
+                processData(simulatedData);
+                
+                // Mostrar alerta de que estamos usando datos simulados
+                showAlert('⚠️ Usando datos simulados. Verifica la conexión con n8n.', 'warning');
+            }
+            
+            updateIcon.innerHTML = '🔄';
+        }
+
+        // ====================================================================
+        // PROCESAR DATOS RECIBIDOS
+        // ====================================================================
+        function processData(data) {
+            totalReadings++;
+            
+            // Extraer datos de sensores
+            const sensors = data.sensor_data || data;
+            
+            // Actualizar interfaz
+            updateSensorDisplay(sensors);
+            updateRecommendations(data.recommendations || data.ai_response);
+            updateHistory(sensors);
+            updateStatusBar();
+            
+            // Guardar en historial
+            sensorData.unshift({
+                timestamp: new Date(),
+                ...sensors
+            });
+            
+            // Mantener solo las últimas 50 lecturas
+            if (sensorData.length > 50) {
+                sensorData = sensorData.slice(0, 50);
+            }
+        }
+
+        // ====================================================================
+        // ACTUALIZAR VISUALIZACIÓN DE SENSORES
+        // ====================================================================
+        function updateSensorDisplay(sensors) {
+            document.getElementById('nitrogen').textContent = (sensors.nitrogen || 0).toFixed(1);
+            document.getElementById('phosphorus').textContent = (sensors.phosphorus || 0).toFixed(1);
+            document.getElementById('potassium').textContent = (sensors.potassium || 0).toFixed(1);
+            document.getElementById('soilMoisture').textContent = (sensors.soil_moisture || 0).toFixed(1);
+            document.getElementById('temperature').textContent = (sensors.temperature || 0).toFixed(1);
+            document.getElementById('humidity').textContent = (sensors.humidity || 0).toFixed(1);
+            
+            // Determinar estado del suelo
+            const soilStatus = calculateSoilStatus(sensors);
+            document.getElementById('soilStatus').textContent = soilStatus;
+        }
+
+        // ====================================================================
+        // CALCULAR ESTADO DEL SUELO
+        // ====================================================================
+        function calculateSoilStatus(sensors) {
+            const n = sensors.nitrogen || 0;
+            const p = sensors.phosphorus || 0;
+            const k = sensors.potassium || 0;
+            const moisture = sensors.soil_moisture || 0;
+            
+            if (n > 80 && p > 30 && k > 120 && moisture > 50) {
+                return '🟢 Óptimo';
+            } else if (n > 50 && p > 20 && k > 80 && moisture > 30) {
+                return '🟡 Bueno';
+            } else {
+                return '🔴 Crítico';
+            }
+        }
+
+        // ====================================================================
+        // ACTUALIZAR RECOMENDACIONES
+        // ====================================================================
+        function updateRecommendations(recommendations) {
+            const container = document.getElementById('recommendations');
+            
+            if (!recommendations || typeof recommendations !== 'string') {
+                // Generar recomendaciones basadas en datos actuales
+                const currentData = {
+                    nitrogen: parseFloat(document.getElementById('nitrogen').textContent) || 0,
+                    phosphorus: parseFloat(document.getElementById('phosphorus').textContent) || 0,
+                    potassium: parseFloat(document.getElementById('potassium').textContent) || 0,
+                    soil_moisture: parseFloat(document.getElementById('soilMoisture').textContent) || 0
+                };
+                
+                recommendations = generateRecommendations(currentData);
+            }
+            
+            container.innerHTML = `
+                <div class="recommendations">
+                    ${recommendations}
+                </div>
+            `;
+        }
+
+        // ====================================================================
+        // GENERAR RECOMENDACIONES BÁSICAS
+        // ====================================================================
+        function generateRecommendations(data) {
+            let recs = '<div class="recommendation-item"><div class="recommendation-icon">🎯</div><div><strong>Recomendaciones para tu cultivo:</strong></div></div>';
+            
+            if (data.nitrogen < 50) {
+                recs += '<div class="recommendation-item"><div class="recommendation-icon">🌱</div><div>Aplicar fertilizante rico en nitrógeno (urea 46-0-0)</div></div>';
+            }
+            
+            if (data.phosphorus < 20) {
+                recs += '<div class="recommendation-item"><div class="recommendation-icon">🌿</div><div>Aumentar fósforo con fosfato diamónico (18-46-0)</div></div>';
+            }
+            
+            if (data.potassium < 80) {
+                recs += '<div class="recommendation-item"><div class="recommendation-icon">🍃</div><div>Aplicar sulfato de potasio para mejor desarrollo</div></div>';
+            }
+            
+            if (data.soil_moisture < 40) {
+                recs += '<div class="recommendation-item"><div class="recommendation-icon">💧</div><div>Incrementar riego - suelo demasiado seco</div></div>';
+            } else if (data.soil_moisture > 80) {
+                recs += '<div class="recommendation-item"><div class="recommendation-icon">⚠️</div><div>Reducir riego - riesgo de encharcamiento</div></div>';
+            }
+            
+            recs += '<div class="recommendation-item"><div class="recommendation-icon">📅</div><div>Próxima medición recomendada: en 2-3 días</div></div>';
+            
+            return recs;
+        }
+
+        // ====================================================================
+        // ACTUALIZAR HISTORIAL
+        // ====================================================================
+        function updateHistory(sensors) {
+            const table = document.getElementById('historyTable');
+            const time = new Date().toLocaleTimeString('es-PA', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            const row = `
+                <tr>
+                    <td>${time}</td>
+                    <td>${(sensors.nitrogen || 0).toFixed(1)}</td>
+                    <td>${(sensors.phosphorus || 0).toFixed(1)}</td>
+                    <td>${(sensors.potassium || 0).toFixed(1)}</td>
+                    <td>${(sensors.soil_moisture || 0).toFixed(1)}%</td>
+                    <td>${(sensors.temperature || 0).toFixed(1)}°C</td>
+                </tr>
+            `;
+            
+            // Si la tabla está vacía, reemplazar el mensaje
+            if (table.children.length === 1 && table.children[0].children.length === 1) {
+                table.innerHTML = row;
+            } else {
+                table.insertAdjacentHTML('afterbegin', row);
+            }
+            
+            // Mantener solo las últimas 10 filas
+            while (table.children.length > 10) {
+                table.removeChild(table.lastChild);
+            }
+        }
+
+        // ====================================================================
+        // ACTUALIZAR BARRA DE ESTADO
+        // ====================================================================
+        function updateStatusBar() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('es-PA', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('totalReadings').textContent = totalReadings;
+        }
+
+        // ====================================================================
+        // ACTUALIZAR ESTADO DE CONEXIÓN
+        // ====================================================================
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connectionStatus');
+            if (connected) {
+                status.textContent = '🟢 Conectado';
+                status.style.color = '#27ae60';
+            } else {
+                status.textContent = '🔴 Desconectado';
+                status.style.color = '#e74c3c';
+            }
+        }
+
+        // ====================================================================
+        // GENERAR DATOS SIMULADOS
+        // ====================================================================
+        function generateSimulatedData() {
+            return {
+                sensor_data: {
+                    nitrogen: Math.random() * 100 + 20,
+                    phosphorus: Math.random() * 40 + 10,
+                    potassium: Math.random() * 200 + 50,
+                    soil_moisture: Math.random() * 60 + 20,
+                    temperature: Math.random() * 10 + 20,
+                    humidity: Math.random() * 40 + 50
+                },
+                device_info: {
+                    device_id: 'ESP32_DEMO',
+                    simulation_mode: true
+                }
+            };
+        }
+
+        // ====================================================================
+        // AUTO-ACTUALIZACIÓN
+        // ====================================================================
+        function startAutoUpdate() {
+            if (autoUpdateInterval) {
+                clearInterval(autoUpdateInterval);
+            }
+            
+            autoUpdateInterval = setInterval(() => {
+                if (autoUpdateEnabled) {
+                    updateData();
+                }
+            }, 30000); // 30 segundos
+        }
+
+        function toggleAutoUpdate() {
+            autoUpdateEnabled = !autoUpdateEnabled;
+            const icon = document.getElementById('autoUpdateIcon');
+            const text = document.getElementById('autoUpdateText');
+            
+            if (autoUpdateEnabled) {
+                icon.textContent = '⏸️';
+                text.textContent = 'Pausar Auto-actualización';
+                showAlert('✅ Auto-actualización activada', 'success');
+            } else {
+                icon.textContent = '▶️';
+                text.textContent = 'Activar Auto-actualización';
+                showAlert('⏸️ Auto-actualización pausada', 'warning');
+            }
+        }
+
+        // ====================================================================
+        // EXPORTAR DATOS
+        // ====================================================================
+        function exportData() {
+            if (sensorData.length === 0) {
+                showAlert('❌ No hay datos para exportar', 'error');
+                return;
+            }
+            
+            let csv = 'Fecha,Hora,Nitrógeno,Fósforo,Potasio,Humedad_Suelo,Temperatura,Humedad_Ambiental\n';
+            
+            sensorData.forEach(data => {
+                const date = data.timestamp.toLocaleDateString('es-PA');
+                const time = data.timestamp.toLocaleTimeString('es-PA');
+                csv += `${date},${time},${data.nitrogen || 0},${data.phosphorus || 0},${data.potassium || 0},${data.soil_moisture || 0},${data.temperature || 0},${data.humidity || 0}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `agromonitor_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showAlert('📥 Datos exportados exitosamente', 'success');
+        }
+
+        // ====================================================================
+        // MOSTRAR ALERTAS
+        // ====================================================================
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type === 'error' ? 'alert-critical' : ''}`;
+            alert.innerHTML = message;
+            alert.style.position = 'fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '1000';
+            alert.style.minWidth = '300px';
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
