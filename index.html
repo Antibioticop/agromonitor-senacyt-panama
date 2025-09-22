@@ -656,11 +656,6 @@
                         <div class="sensor-label">Temperatura</div>
                         <div class="sensor-unit">°C</div>
                     </div>
-                    <div class="sensor-item">
-                        <div class="sensor-value" id="humidity">--</div>
-                        <div class="sensor-label">Humedad Amb.</div>
-                        <div class="sensor-unit">%</div>
-                    </div>
                 </div>
             </section>
 
@@ -1003,7 +998,6 @@
             document.getElementById('potassium').textContent = (sensors.potassium || 0).toFixed(1);
             document.getElementById('soilMoisture').textContent = (sensors.soil_moisture || 0).toFixed(1);
             document.getElementById('temperature').textContent = (sensors.temperature || 0).toFixed(1);
-            document.getElementById('humidity').textContent = (sensors.humidity || 0).toFixed(1);
             
             // Determinar estado del suelo
             const soilStatus = calculateSoilStatus(sensors);
@@ -1138,13 +1132,13 @@
             }
             
             // Crear CSV con datos más detallados
-            let csv = 'Fecha,Hora,Dispositivo,Nitrógeno (mg/kg),Fósforo (mg/kg),Potasio (mg/kg),Humedad Suelo (%),Temperatura (°C),Humedad Ambiental (%),Estado del Suelo\n';
+            let csv = 'Fecha,Hora,Dispositivo,Nitrógeno (mg/kg),Fósforo (mg/kg),Potasio (mg/kg),Humedad Suelo (%),Temperatura (°C),Estado del Suelo\n';
             
             sensorData.forEach(data => {
                 const date = data.timestamp.toLocaleDateString('es-PA');
                 const time = data.timestamp.toLocaleTimeString('es-PA');
                 const soilStatus = calculateSoilStatus(data);
-                csv += `${date},${time},ESP32-SENACYT-DEMO,${data.nitrogen || 0},${data.phosphorus || 0},${data.potassium || 0},${data.soil_moisture || 0},${data.temperature || 0},${data.humidity || 0},"${soilStatus}"\n`;
+                csv += `${date},${time},ESP32-SENACYT-DEMO,${data.nitrogen || 0},${data.phosphorus || 0},${data.potassium || 0},${data.soil_moisture || 0},${data.temperature || 0},"${soilStatus}"\n`;
             });
             
             // Descargar archivo
