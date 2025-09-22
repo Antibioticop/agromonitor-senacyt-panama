@@ -598,13 +598,6 @@
                 <div class="status-label">Estado del Sistema</div>
             </div>
             <div class="status-card">
-                <div class="status-icon time">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="status-value" id="lastUpdate">--:--</div>
-                <div class="status-label">Última Actualización</div>
-            </div>
-            <div class="status-card">
                 <div class="status-icon readings">
                     <i class="fas fa-chart-line"></i>
                 </div>
@@ -743,14 +736,51 @@
         <!-- Footer mejorado -->
         <footer class="footer fade-in">
             <div class="footer-content">
-                <div>
-                    <p><strong>Desarrollado para SENACYT Panamá</strong></p>
-                    <p>Sistema de Monitoreo Agrícola Inteligente con IoT e IA</p>
+                <div style="text-align: center; width: 100%;">
+                    <div style="margin-bottom: 16px;">
+                        <h3 style="color: var(--primary-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">
+                            Desarrollado por
+                        </h3>
+                        <div style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem;">
+                                    JA
+                                </div>
+                                <span style="font-weight: 600; color: var(--text-dark);">Juan Achuura</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--info-color), var(--accent-color)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem;">
+                                    LE
+                                </div>
+                                <span style="font-weight: 600; color: var(--text-dark);">Luis Espino</span>
+                            </div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, rgba(46, 125, 50, 0.1), rgba(76, 175, 80, 0.05)); border: 1px solid rgba(46, 125, 50, 0.2); border-radius: 12px; padding: 16px; margin: 16px auto; max-width: 600px;">
+                            <p style="font-weight: 600; color: var(--primary-color); margin-bottom: 4px; font-size: 1rem;">
+                                Programa de Jóvenes Científicos
+                            </p>
+                            <p style="color: var(--text-dark); font-weight: 500; margin-bottom: 8px;">
+                                SENACYT Panamá 2025
+                            </p>
+                            <p style="color: var(--text-light); font-size: 0.9rem; line-height: 1.4;">
+                                Sistema de Monitoreo Agrícola Inteligente con IoT e Inteligencia Artificial
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="footer-links">
-                    <a href="#" class="footer-link"><i class="fas fa-leaf"></i> Agricultura 4.0</a>
-                    <a href="#" class="footer-link"><i class="fas fa-microchip"></i> IoT Agrícola</a>
-                    <a href="#" class="footer-link"><i class="fas fa-brain"></i> IA Aplicada</a>
+                <div class="footer-links" style="justify-content: center; margin-top: 16px;">
+                    <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
+                        <i class="fas fa-leaf"></i> Agricultura 4.0
+                    </span>
+                    <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
+                        <i class="fas fa-microchip"></i> IoT Agrícola
+                    </span>
+                    <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
+                        <i class="fas fa-brain"></i> IA Aplicada
+                    </span>
+                    <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
+                        <i class="fas fa-flag"></i> Panamá
+                    </span>
                 </div>
             </div>
         </footer>
@@ -876,52 +906,52 @@
         }
 
         // ====================================================================
-        // GENERADOR DE RECOMENDACIONES INTELIGENTES
+        // GENERADOR DE RECOMENDACIONES SIMPLES PARA AGRICULTORES
         // ====================================================================
         function generateIntelligentRecommendations() {
             const scenarios = [
                 {
                     condition: "optimal",
-                    title: "Estado Óptimo del Cultivo",
+                    title: "Su cultivo está en excelente estado",
                     icon: "🟢",
                     recommendations: [
-                        "Mantener el programa de riego actual",
-                        "Continuar con el monitoreo regular cada 2-3 días",
-                        "Considerar aplicación preventiva de micronutrientes",
-                        "Evaluar preparación para próxima cosecha"
+                        "Continúe regando como lo está haciendo",
+                        "Revise las plantas cada 2-3 días",
+                        "Todo está funcionando bien",
+                        "Su cosecha será buena"
                     ]
                 },
                 {
                     condition: "nitrogen_low", 
-                    title: "Deficiencia de Nitrógeno Detectada",
+                    title: "Sus plantas necesitan más nutrientes",
                     icon: "🟡",
                     recommendations: [
-                        "Aplicar fertilizante nitrogenado (Urea 46-0-0) a razón de 50kg/ha",
-                        "Incrementar frecuencia de monitoreo a cada 1-2 días",
-                        "Verificar sistema de drenaje para evitar lixiviación",
-                        "Considerar análisis foliar complementario"
+                        "Aplique abono rico en nitrógeno (como urea)",
+                        "Use 1 saco por hectárea",
+                        "Revise las plantas todos los días",
+                        "Asegúrese que el agua drene bien"
                     ]
                 },
                 {
                     condition: "moisture_critical",
-                    title: "Nivel Crítico de Humedad",
+                    title: "URGENTE: Sus plantas necesitan más agua",
                     icon: "🔴", 
                     recommendations: [
-                        "ACCIÓN INMEDIATA: Aumentar frecuencia de riego",
-                        "Verificar funcionamiento del sistema de irrigación",
-                        "Aplicar mulching para conservar humedad",
-                        "Monitorear estrés hídrico en plantas indicadoras"
+                        "Riegue inmediatamente - las plantas están secas",
+                        "Revise que los aspersores funcionen bien", 
+                        "Cubra el suelo con hojas secas para guardar humedad",
+                        "Observe si las hojas se ven marchitas"
                     ]
                 },
                 {
                     condition: "balanced",
-                    title: "Condiciones Favorables",
+                    title: "Todo está bien en su cultivo",
                     icon: "✅",
                     recommendations: [
-                        "Los niveles nutricionales están dentro del rango óptimo",
-                        "Mantener programa de fertilización actual",
-                        "Continuar monitoreo preventivo",
-                        "Preparar aplicación de fertilizante potásico en 2 semanas"
+                        "Los nutrientes del suelo están perfectos",
+                        "Mantenga el mismo programa de fertilización",
+                        "Siga revisando las plantas regularmente",
+                        "En 2 semanas agregue fertilizante de potasio"
                     ]
                 }
             ];
@@ -946,7 +976,7 @@
                     <div class="recommendation-item">
                         <div class="recommendation-icon"><i class="fas fa-calendar"></i></div>
                         <div class="recommendation-text">
-                            <strong>Próxima evaluación recomendada:</strong> ${getNextEvaluationDate()}
+                            <strong>Próxima revisión recomendada:</strong> ${getNextEvaluationDate()}
                         </div>
                     </div>
                 </div>
@@ -1064,11 +1094,6 @@
         }
 
         function updateStatusBar() {
-            const now = new Date();
-            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('es-PA', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
             document.getElementById('totalReadings').textContent = totalReadings;
         }
 
@@ -1217,9 +1242,6 @@
                 }
             }
         });
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
