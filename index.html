@@ -134,12 +134,6 @@
             color: var(--success-color);
         }
 
-        .status-pill.disconnected {
-            background: rgba(244, 67, 54, 0.1);
-            border-color: var(--danger-color);
-            color: var(--danger-color);
-        }
-
         /* Barra de estado principal */
         .status-bar {
             display: grid;
@@ -189,7 +183,6 @@
         }
 
         .status-icon.connection { background: linear-gradient(135deg, #4CAF50, #45a049); }
-        .status-icon.time { background: linear-gradient(135deg, #2196F3, #1976D2); }
         .status-icon.readings { background: linear-gradient(135deg, #FF9800, #F57C00); }
         .status-icon.soil { background: linear-gradient(135deg, #795548, #5D4037); }
 
@@ -384,10 +377,6 @@
             box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
         .btn.btn-secondary {
             background: linear-gradient(135deg, var(--info-color), #1976D2);
             box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
@@ -404,15 +393,6 @@
 
         .btn.btn-warning:hover {
             box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
-        }
-
-        .btn.btn-reconnect {
-            background: linear-gradient(135deg, var(--info-color), var(--secondary-color));
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
-        }
-
-        .btn.btn-reconnect:hover {
-            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
 
         /* Historial */
@@ -472,22 +452,10 @@
             color: var(--success-color);
         }
 
-        .alert-warning {
-            background: rgba(255, 193, 7, 0.1);
-            border-color: var(--warning-color);
-            color: #E65100;
-        }
-
         .alert-info {
             background: rgba(33, 150, 243, 0.1);
             border-color: var(--info-color);
             color: var(--info-color);
-        }
-
-        .alert-error {
-            background: rgba(244, 67, 54, 0.1);
-            border-color: var(--danger-color);
-            color: var(--danger-color);
         }
 
         /* Footer */
@@ -569,20 +537,11 @@
             .sensors-grid { grid-template-columns: 1fr; }
             .status-bar { grid-template-columns: 1fr; }
         }
-
-        /* Modo oscuro para pantallas OLED */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --card-bg: rgba(30, 30, 30, 0.95);
-                --text-dark: #e0e0e0;
-                --text-light: #b0b0b0;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header mejorado -->
+        <!-- Header -->
         <header class="header fade-in">
             <div class="header-content">
                 <div class="logo-section">
@@ -595,9 +554,9 @@
                     </div>
                 </div>
                 <div class="status-indicators">
-                    <div class="status-pill" id="connectionPill">
+                    <div class="status-pill connected">
                         <i class="fas fa-circle"></i>
-                        <span id="connectionText">Conectando...</span>
+                        <span>Sistema Operativo</span>
                     </div>
                 </div>
             </div>
@@ -607,9 +566,9 @@
         <section class="status-bar fade-in">
             <div class="status-card">
                 <div class="status-icon connection">
-                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-leaf"></i>
                 </div>
-                <div class="status-value" id="systemStatus">Iniciando...</div>
+                <div class="status-value" id="systemStatus">Operativo</div>
                 <div class="status-label">Estado del Sistema</div>
             </div>
             <div class="status-card">
@@ -621,7 +580,7 @@
             </div>
             <div class="status-card">
                 <div class="status-icon soil">
-                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-spa"></i>
                 </div>
                 <div class="status-value" id="soilStatus">Analizando...</div>
                 <div class="status-label">Estado del Suelo</div>
@@ -679,8 +638,8 @@
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i>
                         <div>
-                            <strong>Conectando con sistema de IA...</strong><br>
-                            Obteniendo recomendaciones desde n8n y Google Gemini.
+                            <strong>Sistema iniciado correctamente</strong><br>
+                            Las recomendaciones aparecerán cuando se analicen los datos de sensores.
                         </div>
                     </div>
                 </div>
@@ -705,17 +664,13 @@
                     </button>
                     <button class="btn btn-warning" onclick="toggleAutoUpdate()">
                         <span id="autoUpdateIcon"><i class="fas fa-pause"></i></span>
-                        <span id="autoUpdateText">Auto-actualización</span>
-                    </button>
-                    <button class="btn btn-reconnect" onclick="reconnectToN8N()" id="reconnectBtn" style="display: none;">
-                        <i class="fas fa-wifi"></i>
-                        Reconectar n8n
+                        <span id="autoUpdateText">Pausar Auto-actualización</span>
                     </button>
                 </div>
-                <div class="alert" id="modeAlert">
-                    <i class="fas fa-cloud"></i>
-                    <div id="modeText">
-                        <strong>Conectando...</strong> Intentando obtener datos reales desde n8n.
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Sistema Operativo:</strong> Datos simulados basados en condiciones reales de agricultura en Panamá. Actualización automática cada 15 segundos.
                     </div>
                 </div>
             </section>
@@ -743,7 +698,7 @@
                         <tbody id="historyTable">
                             <tr>
                                 <td colspan="6" style="text-align: center; color: #7f8c8d; padding: 20px;">
-                                    <i class="fas fa-spinner fa-spin"></i> Conectando con sistema...
+                                    <i class="fas fa-spinner fa-spin"></i> Iniciando sistema de sensores...
                                 </td>
                             </tr>
                         </tbody>
@@ -752,7 +707,7 @@
             </section>
         </main>
 
-        <!-- Footer mejorado -->
+        <!-- Footer -->
         <footer class="footer fade-in">
             <div class="footer-content">
                 <div style="text-align: center; width: 100%;">
@@ -789,6 +744,9 @@
                 </div>
                 <div class="footer-links" style="justify-content: center; margin-top: 16px;">
                     <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
+                        <i class="fas fa-leaf"></i> Agricultura 4.0
+                    </span>
+                    <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
                         <i class="fas fa-microchip"></i> IoT Agrícola
                     </span>
                     <span class="footer-link" style="display: flex; align-items: center; gap: 6px; cursor: default;">
@@ -803,397 +761,36 @@
     </div>
 
     <script>
-        // ====================================================================
-        // CONFIGURACIÓN - App conectada a n8n REAL
-        // ====================================================================
-        const CONFIG = {
-            // 🔥 CAMBIAR ESTA URL POR TU URL REAL DE N8N:
-            n8nReadAPI: 'https://lgespino.app.n8n.cloud/webhook/api-app-datos-senacyt',
-            fallbackToDemo: true, // Si falla conexión, usar datos simulados
-            updateInterval: 30000, // 30 segundos
-            maxRetries: 3, // Máximo reintentos antes de cambiar a modo demo
-            timeout: 10000 // 10 segundos timeout por petición
-        };
-        
-        // ====================================================================
-        // VARIABLES GLOBALES
-        // ====================================================================
+        // CONFIGURACIÓN
+        const UPDATE_INTERVAL = 15000; // 15 segundos
         let autoUpdateEnabled = true;
         let autoUpdateInterval;
         let sensorData = [];
         let totalReadings = 0;
-        let isConnected = false;
-        let retryCount = 0;
-        let realDataMode = true; // Iniciamos intentando datos reales
 
-        // ====================================================================
         // INICIALIZACIÓN
-        // ====================================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🌱 AgroMonitor Pro - SENACYT iniciado');
-            console.log('🔗 Intentando conectar con n8n...');
-            console.log('📡 URL configurada:', CONFIG.n8nReadAPI);
+            console.log('AgroMonitor Pro - SENACYT iniciado');
             initializeSystem();
             updateData();
             startAutoUpdate();
         });
 
-        // ====================================================================
-        // INICIALIZACIÓN DEL SISTEMA
-        // ====================================================================
         function initializeSystem() {
-            updateConnectionStatus(false);
-            showWelcomeMessage();
             setTimeout(() => {
-                if (isConnected) {
-                    showAlert('Sistema conectado exitosamente a n8n', 'success');
-                } else {
-                    showAlert('Verificando conexión con n8n...', 'info');
-                }
-            }, 3000);
+                showAlert('Sistema iniciado correctamente', 'success');
+            }, 1500);
         }
 
-        function showWelcomeMessage() {
-            const recommendations = document.getElementById('recommendations');
-            recommendations.innerHTML = `
-                <div class="alert alert-info">
-                    <i class="fas fa-satellite-dish"></i>
-                    <div>
-                        <strong>Conectando con n8n...</strong><br>
-                        Obteniendo datos reales desde Google Sheets y análisis de IA.
-                    </div>
-                </div>
-            `;
-        }
-
-        // ====================================================================
-        // ACTUALIZACIÓN DE DATOS (REALES DESDE N8N)
-        // ====================================================================
-        async function updateData() {
-            const updateIcon = document.getElementById('updateIcon');
-            updateIcon.innerHTML = '<div class="loading"></div>';
-            
-            try {
-                if (realDataMode) {
-                    console.log('🌐 Intentando obtener datos desde n8n...');
-                    console.log('📡 URL:', CONFIG.n8nReadAPI);
-                    
-                    // Timeout para la petición HTTP
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), CONFIG.timeout);
-                    
-                    const response = await fetch(CONFIG.n8nReadAPI, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        mode: 'cors',
-                        signal: controller.signal
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('✅ Datos recibidos desde n8n:', data);
-                        
-                        // Procesar datos reales de n8n
-                        processRealData(data);
-                        updateConnectionStatus(true);
-                        retryCount = 0;
-                        updateModeAlert('success');
-                        hideReconnectButton();
-                        
-                    } else {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                }
-            } catch (error) {
-                console.warn('⚠️ Error conectando con n8n:', error.message);
-                handleConnectionError(error.message);
-            }
-            
-            updateIcon.innerHTML = '<i class="fas fa-sync-alt"></i>';
-        }
-
-        // ====================================================================
-        // PROCESAMIENTO DE DATOS REALES DE N8N
-        // ====================================================================
-        function processRealData(data) {
-            console.log('📊 Procesando datos reales de n8n...');
-            
-            try {
-                // Si los datos vienen como array (múltiples filas), tomar la más reciente
-                let latestData = Array.isArray(data) ? data[0] : data;
-                
-                // Verificar que tenemos datos válidos
-                if (!latestData || typeof latestData !== 'object') {
-                    throw new Error('Datos recibidos no válidos');
-                }
-                
-                // Adaptarse a la estructura que viene de Google Sheets vía n8n
-                let sensorData = {
-                    nitrogen: parseFloat(latestData.Nitrogeno || latestData.nitrogen || 0),
-                    phosphorus: parseFloat(latestData.Fosforo || latestData.phosphorus || 0),  
-                    potassium: parseFloat(latestData.Potasio || latestData.potassium || 0),
-                    soil_moisture: parseFloat(latestData.Humedad_Suelo || latestData.soil_moisture || 0),
-                    temperature: parseFloat(latestData.Temperatura || latestData.temperature || 0),
-                    humidity: parseFloat(latestData.Humedad || latestData.humidity || 0)
-                };
-                
-                // Datos del dispositivo
-                let deviceInfo = {
-                    device_id: latestData.Dispositivo || latestData.device_id || 'ESP32-SENACYT',
-                    wifi_signal: parseInt(latestData.WiFi_Signal || latestData.wifi_signal || -50),
-                    field_id: latestData.Campo || latestData.field_id || 'campo_panama'
-                };
-                
-                // Recomendaciones de IA de Google Gemini
-                let recommendations = latestData.Analisis_IA || latestData.recommendations || '';
-                
-                // Estructura final para procesar
-                const processedData = {
-                    sensor_data: sensorData,
-                    device_info: deviceInfo,
-                    recommendations: recommendations,
-                    status: 'success',
-                    source: 'n8n',
-                    timestamp: latestData.Timestamp || new Date().toISOString()
-                };
-                
-                console.log('✅ Datos procesados correctamente:', processedData);
-                processData(processedData);
-                
-            } catch (error) {
-                console.error('❌ Error procesando datos de n8n:', error);
-                throw new Error('Error procesando datos: ' + error.message);
-            }
-        }
-
-        // ====================================================================
-        // MANEJO DE ERRORES DE CONEXIÓN  
-        // ====================================================================
-        function handleConnectionError(errorMessage = '') {
-            retryCount++;
-            console.log(`❌ Error de conexión (${retryCount}/${CONFIG.maxRetries}):`, errorMessage);
-            
-            if (retryCount < CONFIG.maxRetries) {
-                console.log(`🔄 Reintento ${retryCount}/${CONFIG.maxRetries} en 5 segundos...`);
-                updateConnectionStatus(false);
-                updateModeAlert('warning');
-                
-                // Reintentar en 5 segundos
-                setTimeout(() => {
-                    updateData();
-                }, 5000);
-                
-            } else if (CONFIG.fallbackToDemo) {
-                console.log('🎭 Cambiando a modo demo por fallos de conexión');
-                realDataMode = false;
-                updateModeAlert('demo');
-                showReconnectButton();
-                
-                // Generar datos simulados
-                const simulatedData = generateAdvancedSimulatedData();
-                processData(simulatedData);
-                updateConnectionStatus(false);
-                
-                showAlert('Usando datos simulados - Verificar conexión n8n', 'warning');
-            } else {
-                updateConnectionStatus(false);
-                updateModeAlert('error');
-                showReconnectButton();
-                showAlert('Error de conexión - Verifique configuración n8n', 'error');
-            }
-        }
-
-        // ====================================================================
-        // ACTUALIZACIÓN DEL INDICADOR DE MODO
-        // ====================================================================
-        function updateModeAlert(type) {
-            const modeAlert = document.getElementById('modeAlert');
-            const modeText = document.getElementById('modeText');
-            
-            // Remover clases existentes
-            modeAlert.className = 'alert';
-            
-            switch(type) {
-                case 'success':
-                    modeAlert.classList.add('alert-success');
-                    modeText.innerHTML = `
-                        <strong>✅ Conectado a n8n:</strong> Datos reales desde Google Sheets y análisis IA de Google Gemini.
-                        <br><small>Última actualización: ${new Date().toLocaleString('es-PA')}</small>
-                    `;
-                    break;
-                    
-                case 'warning':
-                    modeAlert.classList.add('alert-warning');
-                    modeText.innerHTML = `
-                        <strong>⚠️ Reintentando conexión:</strong> Problemas conectando con n8n. 
-                        Reintento ${retryCount}/${CONFIG.maxRetries}...
-                    `;
-                    break;
-                    
-                case 'demo':
-                    modeAlert.classList.add('alert-info');
-                    modeText.innerHTML = `
-                        <strong>🎭 Modo Demo Activo:</strong> Usando datos simulados. 
-                        Haga clic en "Reconectar n8n" para intentar datos reales.
-                    `;
-                    break;
-                    
-                case 'error':
-                    modeAlert.classList.add('alert-error');
-                    modeText.innerHTML = `
-                        <strong>❌ Error de Conexión:</strong> No se puede conectar con n8n. 
-                        Verifique la configuración del webhook.
-                    `;
-                    break;
-                    
-                default:
-                    modeAlert.classList.add('alert-info');
-                    modeText.innerHTML = `
-                        <strong>🔄 Conectando...</strong> Intentando obtener datos reales desde n8n...
-                    `;
-                    break;
-            }
-        }
-
-        // ====================================================================
-        // BOTONES DE RECONEXIÓN
-        // ====================================================================
-        function showReconnectButton() {
-            const reconnectBtn = document.getElementById('reconnectBtn');
-            reconnectBtn.style.display = 'flex';
-        }
-
-        function hideReconnectButton() {
-            const reconnectBtn = document.getElementById('reconnectBtn');
-            reconnectBtn.style.display = 'none';
-        }
-
-        function reconnectToN8N() {
-            console.log('🔄 Intentando reconectar con n8n...');
-            retryCount = 0;
-            realDataMode = true;
-            hideReconnectButton();
-            updateModeAlert('connecting');
-            showAlert('Intentando reconectar con n8n...', 'info');
-            updateData();
-        }
-
-        // ====================================================================
-        // PROCESAMIENTO DE DATOS (UNIFICADO)
-        // ====================================================================
-        function processData(data) {
-            totalReadings++;
-            
-            const sensors = data.sensor_data || data;
-            const source = data.source || (realDataMode ? 'n8n' : 'simulado');
-            
-            console.log(`📊 Procesando datos (${source}):`, sensors);
-            
-            updateSensorDisplay(sensors);
-            updateRecommendations(data.recommendations);
-            updateHistory(sensors, source);
-            updateStatusBar();
-            
-            // Guardar en historial
-            sensorData.unshift({
-                timestamp: new Date(),
-                source: source,
-                ...sensors
-            });
-            
-            // Mantener solo las últimas 20 lecturas
-            if (sensorData.length > 20) {
-                sensorData = sensorData.slice(0, 20);
-            }
-        }
-
-        // ====================================================================
-        // ACTUALIZACIÓN DE RECOMENDACIONES (MEJORADA PARA IA REAL)
-        // ====================================================================
-        function updateRecommendations(recommendations) {
-            const container = document.getElementById('recommendations');
-            
-            if (recommendations && typeof recommendations === 'string' && recommendations.trim() !== '') {
-                // Si tenemos recomendaciones reales de la IA, formatearlas
-                const formattedRecommendations = formatAIRecommendations(recommendations);
-                container.innerHTML = formattedRecommendations;
-            } else if (!realDataMode) {
-                // Solo generar recomendaciones simuladas si estamos en modo demo
-                container.innerHTML = generateIntelligentRecommendations();
-            } else {
-                // Mostrar mensaje de carga si esperamos datos reales
-                container.innerHTML = `
-                    <div class="alert alert-warning">
-                        <i class="fas fa-brain"></i>
-                        <div>
-                            <strong>Esperando análisis de IA...</strong><br>
-                            El sistema está procesando los datos con Google Gemini.
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        // ====================================================================
-        // FORMATEO DE RECOMENDACIONES REALES DE IA
-        // ====================================================================
-        function formatAIRecommendations(aiText) {
-            // Limpiar y formatear el texto de la IA
-            const cleanText = aiText.replace(/\*\*/g, '').replace(/\*/g, '').trim();
-            
-            // Dividir por líneas y crear recomendaciones
-            const lines = cleanText.split('\n').filter(line => line.trim() !== '');
-            
-            let formattedHTML = `
-                <div class="recommendations">
-                    <div class="recommendation-item">
-                        <div class="recommendation-icon">AI</div>
-                        <div class="recommendation-text">
-                            <strong>Análisis de Google Gemini IA:</strong>
-                        </div>
-                    </div>
-            `;
-            
-            // Procesar cada línea del análisis de IA
-            lines.forEach((line, index) => {
-                if (line.length > 15) { // Solo líneas con contenido sustancial
-                    formattedHTML += `
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">${index + 1}</div>
-                            <div class="recommendation-text">${line.trim()}</div>
-                        </div>
-                    `;
-                }
-            });
-            
-            // Agregar timestamp
-            formattedHTML += `
-                <div class="recommendation-item">
-                    <div class="recommendation-icon"><i class="fas fa-clock"></i></div>
-                    <div class="recommendation-text">
-                        <strong>Análisis generado:</strong> ${new Date().toLocaleString('es-PA')}
-                    </div>
-                </div>
-            </div>`;
-            
-            return formattedHTML;
-        }
-
-        // ====================================================================
-        // GENERADOR DE DATOS SIMULADOS (PARA FALLBACK)
-        // ====================================================================
+        // GENERADOR DE DATOS SIMULADOS REALISTAS
         function generateAdvancedSimulatedData() {
             const hour = new Date().getHours();
             const isRainySeason = Math.random() > 0.7;
             
-            let tempBase = 26; // Temperatura base para Panamá
-            let humidityBase = 75; // Humedad base tropical
+            let tempBase = 26; // Panamá
+            let humidityBase = 75;
             
+            // Variaciones por hora del día
             if (hour >= 10 && hour <= 15) {
                 tempBase += Math.random() * 6;
                 humidityBase -= Math.random() * 15;
@@ -1222,18 +819,14 @@
                     last_update: new Date().toISOString()
                 },
                 recommendations: generateIntelligentRecommendations(),
-                status: 'success',
-                source: 'simulado'
+                status: 'success'
             };
         }
 
-        // ====================================================================
-        // GENERADOR DE RECOMENDACIONES SIMULADAS
-        // ====================================================================
+        // GENERADOR DE RECOMENDACIONES
         function generateIntelligentRecommendations() {
             const scenarios = [
                 {
-                    condition: "optimal",
                     title: "Su cultivo está en excelente estado",
                     icon: "🟢",
                     recommendations: [
@@ -1244,7 +837,6 @@
                     ]
                 },
                 {
-                    condition: "nitrogen_low", 
                     title: "Sus plantas necesitan más nutrientes",
                     icon: "🟡",
                     recommendations: [
@@ -1255,14 +847,23 @@
                     ]
                 },
                 {
-                    condition: "moisture_critical",
                     title: "URGENTE: Sus plantas necesitan más agua",
-                    icon: "🔴", 
+                    icon: "🔴",
                     recommendations: [
                         "Riegue inmediatamente - las plantas están secas",
-                        "Revise que los aspersores funcionen bien", 
+                        "Revise que los aspersores funcionen bien",
                         "Cubra el suelo con hojas secas para guardar humedad",
                         "Observe si las hojas se ven marchitas"
+                    ]
+                },
+                {
+                    title: "Todo está bien en su cultivo",
+                    icon: "✅",
+                    recommendations: [
+                        "Los nutrientes del suelo están perfectos",
+                        "Mantenga el mismo programa de fertilización",
+                        "Siga revisando las plantas regularmente",
+                        "En 2 semanas agregue fertilizante de potasio"
                     ]
                 }
             ];
@@ -1286,7 +887,7 @@
                     <div class="recommendation-item">
                         <div class="recommendation-icon"><i class="fas fa-calendar"></i></div>
                         <div class="recommendation-text">
-                            <strong>Próxima revisión:</strong> ${getNextEvaluationDate()}
+                            <strong>Próxima revisión recomendada:</strong> ${getNextEvaluationDate()}
                         </div>
                     </div>
                 </div>
@@ -1304,9 +905,46 @@
             });
         }
 
-        // ====================================================================
+        // ACTUALIZACIÓN DE DATOS
+        async function updateData() {
+            const updateIcon = document.getElementById('updateIcon');
+            updateIcon.innerHTML = '<div class="loading"></div>';
+            
+            try {
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                const simulatedData = generateAdvancedSimulatedData();
+                processData(simulatedData);
+                
+            } catch (error) {
+                console.error('Error en actualización:', error);
+            }
+            
+            updateIcon.innerHTML = '<i class="fas fa-sync-alt"></i>';
+        }
+
+        // PROCESAMIENTO DE DATOS
+        function processData(data) {
+            totalReadings++;
+            
+            const sensors = data.sensor_data || data;
+            
+            updateSensorDisplay(sensors);
+            updateRecommendations(data.recommendations);
+            updateHistory(sensors);
+            updateStatusBar();
+            
+            sensorData.unshift({
+                timestamp: new Date(),
+                ...sensors
+            });
+            
+            if (sensorData.length > 20) {
+                sensorData = sensorData.slice(0, 20);
+            }
+        }
+
         // ACTUALIZACIÓN DE INTERFAZ
-        // ====================================================================
         function updateSensorDisplay(sensors) {
             document.getElementById('nitrogen').textContent = (sensors.nitrogen || 0).toFixed(1);
             document.getElementById('phosphorus').textContent = (sensors.phosphorus || 0).toFixed(1);
@@ -1314,7 +952,6 @@
             document.getElementById('soilMoisture').textContent = (sensors.soil_moisture || 0).toFixed(1);
             document.getElementById('temperature').textContent = (sensors.temperature || 0).toFixed(1);
             
-            // Determinar estado del suelo
             const soilStatus = calculateSoilStatus(sensors);
             document.getElementById('soilStatus').textContent = soilStatus;
         }
@@ -1336,7 +973,14 @@
             }
         }
 
-        function updateHistory(sensors, source = 'unknown') {
+        function updateRecommendations(recommendations) {
+            const container = document.getElementById('recommendations');
+            if (recommendations && typeof recommendations === 'string') {
+                container.innerHTML = recommendations;
+            }
+        }
+
+        function updateHistory(sensors) {
             const table = document.getElementById('historyTable');
             const time = new Date().toLocaleTimeString('es-PA', { 
                 hour: '2-digit', 
@@ -1344,14 +988,9 @@
                 second: '2-digit'
             });
             
-            // Agregar indicador de fuente
-            const sourceIcon = source === 'n8n' ? '<i class="fas fa-cloud" title="Datos reales"></i>' : 
-                              source === 'simulado' ? '<i class="fas fa-desktop" title="Datos simulados"></i>' : 
-                              '<i class="fas fa-question" title="Fuente desconocida"></i>';
-            
             const row = `
                 <tr class="fade-in">
-                    <td>${sourceIcon} ${time}</td>
+                    <td><i class="fas fa-clock"></i> ${time}</td>
                     <td>${(sensors.nitrogen || 0).toFixed(1)}</td>
                     <td>${(sensors.phosphorus || 0).toFixed(1)}</td>
                     <td>${(sensors.potassium || 0).toFixed(1)}</td>
@@ -1360,14 +999,12 @@
                 </tr>
             `;
             
-            // Si la tabla está vacía, reemplazar el mensaje
             if (table.children.length === 1 && table.children[0].children.length === 1) {
                 table.innerHTML = row;
             } else {
                 table.insertAdjacentHTML('afterbegin', row);
             }
             
-            // Mantener solo las últimas 15 filas
             while (table.children.length > 15) {
                 table.removeChild(table.lastChild);
             }
@@ -1377,30 +1014,7 @@
             document.getElementById('totalReadings').textContent = totalReadings;
         }
 
-        function updateConnectionStatus(connected) {
-            isConnected = connected;
-            const statusPill = document.getElementById('connectionPill');
-            const connectionText = document.getElementById('connectionText');
-            const systemStatus = document.getElementById('systemStatus');
-            
-            if (connected && realDataMode) {
-                statusPill.className = 'status-pill connected';
-                connectionText.textContent = 'n8n Conectado';
-                systemStatus.textContent = 'Datos Reales';
-            } else if (!connected && !realDataMode) {
-                statusPill.className = 'status-pill disconnected';
-                connectionText.textContent = 'Modo Demo';
-                systemStatus.textContent = 'Simulado';
-            } else {
-                statusPill.className = 'status-pill disconnected';
-                connectionText.textContent = 'Sin Conexión';
-                systemStatus.textContent = 'Error';
-            }
-        }
-
-        // ====================================================================
         // CONTROL DE AUTO-ACTUALIZACIÓN
-        // ====================================================================
         function startAutoUpdate() {
             if (autoUpdateInterval) {
                 clearInterval(autoUpdateInterval);
@@ -1410,7 +1024,7 @@
                 if (autoUpdateEnabled) {
                     updateData();
                 }
-            }, CONFIG.updateInterval);
+            }, UPDATE_INTERVAL);
         }
 
         function toggleAutoUpdate() {
@@ -1421,7 +1035,7 @@
             if (autoUpdateEnabled) {
                 icon.innerHTML = '<i class="fas fa-pause"></i>';
                 text.textContent = 'Pausar Auto-actualización';
-                showAlert('Auto-actualización activada (cada 30 segundos)', 'success');
+                showAlert('Auto-actualización activada (cada 15 segundos)', 'success');
                 startAutoUpdate();
             } else {
                 icon.innerHTML = '<i class="fas fa-play"></i>';
@@ -1431,27 +1045,22 @@
             }
         }
 
-        // ====================================================================
         // EXPORTACIÓN DE DATOS
-        // ====================================================================
         function exportData() {
             if (sensorData.length === 0) {
                 showAlert('No hay datos disponibles para exportar', 'warning');
                 return;
             }
             
-            // Crear CSV con datos más detallados
-            let csv = 'Fecha,Hora,Fuente,Dispositivo,Nitrógeno (mg/kg),Fósforo (mg/kg),Potasio (mg/kg),Humedad Suelo (%),Temperatura (°C),Estado del Suelo\n';
+            let csv = 'Fecha,Hora,Dispositivo,Nitrógeno (mg/kg),Fósforo (mg/kg),Potasio (mg/kg),Humedad Suelo (%),Temperatura (°C),Estado del Suelo\n';
             
             sensorData.forEach(data => {
                 const date = data.timestamp.toLocaleDateString('es-PA');
                 const time = data.timestamp.toLocaleTimeString('es-PA');
                 const soilStatus = calculateSoilStatus(data);
-                const deviceId = realDataMode ? 'ESP32-SENACYT-REAL' : 'ESP32-SENACYT-DEMO';
-                csv += `${date},${time},${data.source || 'unknown'},${deviceId},${data.nitrogen || 0},${data.phosphorus || 0},${data.potassium || 0},${data.soil_moisture || 0},${data.temperature || 0},"${soilStatus}"\n`;
+                csv += `${date},${time},ESP32-SENACYT-DEMO,${data.nitrogen || 0},${data.phosphorus || 0},${data.potassium || 0},${data.soil_moisture || 0},${data.temperature || 0},"${soilStatus}"\n`;
             });
             
-            // Descargar archivo
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1463,16 +1072,13 @@
             showAlert('Datos exportados exitosamente en formato CSV', 'success');
         }
 
-        // ====================================================================
         // SISTEMA DE ALERTAS
-        // ====================================================================
         function showAlert(message, type = 'info') {
             const alert = document.createElement('div');
             alert.className = `alert alert-${type} fade-in`;
             
             const icon = type === 'success' ? 'fas fa-check-circle' : 
-                        type === 'warning' ? 'fas fa-exclamation-triangle' : 
-                        type === 'error' ? 'fas fa-times-circle' : 'fas fa-info-circle';
+                        type === 'warning' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
             
             alert.innerHTML = `
                 <i class="${icon}"></i>
@@ -1495,9 +1101,7 @@
             }, 4000);
         }
 
-        // ====================================================================
         // EVENTOS DEL TECLADO
-        // ====================================================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
                 e.preventDefault();
@@ -1508,42 +1112,23 @@
                 e.preventDefault();
                 toggleAutoUpdate();
             }
-            if (e.ctrlKey && e.key === 'n') {
-                e.preventDefault();
-                reconnectToN8N();
-            }
         });
 
-        // ====================================================================
         // DETECCIÓN DE VISIBILIDAD DE PÁGINA
-        // ====================================================================
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
-                // Pausar actualizaciones cuando la página no es visible
                 if (autoUpdateInterval) {
                     clearInterval(autoUpdateInterval);
                 }
             } else {
-                // Reanudar cuando la página vuelve a ser visible
                 if (autoUpdateEnabled) {
-                    updateData(); // Actualización inmediata
+                    updateData();
                     startAutoUpdate();
                 }
             }
         });
-
-        // ====================================================================
-        // DEBUG INFORMATION (SOLO PARA DESARROLLO)
-        // ====================================================================
-        console.log('🔧 AgroMonitor Pro - Configuración de Debug:');
-        console.log('📡 URL n8n:', CONFIG.n8nReadAPI);
-        console.log('⏱️ Intervalo:', CONFIG.updateInterval / 1000, 'segundos');
-        console.log('🔄 Reintentos máximos:', CONFIG.maxRetries);
-        console.log('⏳ Timeout:', CONFIG.timeout / 1000, 'segundos');
-        console.log('🎭 Fallback demo:', CONFIG.fallbackToDemo ? 'Activado' : 'Desactivado');
     </script>
 </body>
-</html>" style="display: flex; align-items: center; gap: 6px; cursor: default;">
-                        <i class="fas fa-leaf"></i> Agricultura 4.0
+</html>
                     </span>
                     <span class="footer-link
